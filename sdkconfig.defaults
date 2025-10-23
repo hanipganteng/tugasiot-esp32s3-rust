@@ -1,0 +1,25 @@
+# Rust often needs a bit of an extra main task stack size compared to C (the default is 3K)
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8000
+
+# Use this to set FreeRTOS kernel tick frequency to 1000 Hz (100 Hz by default).
+# This allows to use 1 ms granularity for thread sleeps (10 ms by default).
+#CONFIG_FREERTOS_HZ=1000
+
+# Workaround for https://github.com/espressif/esp-idf/issues/7631
+#CONFIG_MBEDTLS_CERTIFICATE_BUNDLE=n
+#CONFIG_MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL=n
+# Konfigurasi Partisi Custom
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="/home/hanif/dht11_sukses/partitions_custom.csv"
+
+# === KONFIGURASI WATCHDOG UNTUK SENSOR DHT ===
+
+# 1. Perpanjang waktu timeout Task Watchdog menjadi 15 detik (dari default 5 detik)
+CONFIG_ESP_TASK_WDT_TIMEOUT_S=15
+
+# 2. Nonaktifkan pengawasan watchdog pada task IDLE untuk CPU0
+# Ini penting karena sensor_task kita akan memonopoli CPU0 saat membaca,
+# sehingga task IDLE pasti akan terlihat "macet". Kita abaikan saja.
+CONFIG_ESP_TASK_WDT_CHECK_IDLE_TASK_CPU0=n
+
+# 3. Nonaktifkan juga untuk CPU1 untuk konsistensi
+CONFIG_ESP_TASK_WDT_CHECK_IDLE_TASK_CPU1=n
